@@ -61,7 +61,7 @@ function getAllEventsSummary() {
   var infos = [
     ['Calculation day', `${year}-${month + 1}-${day}`],
     ['Month', now.toLocaleString('default', { month: 'long' })],
-    ['Total time', totalTime]
+    ['Total time (Hours)', totalTime]
   ]
 
 
