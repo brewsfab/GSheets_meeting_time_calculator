@@ -1,4 +1,4 @@
-function getAllEventsSummary() {
+function getAllEventsSummary(fullSummary=true) {
 
   var now = new Date();
   var day = now.getDate();
@@ -70,18 +70,26 @@ function getAllEventsSummary() {
   **/
   var insertInfo = ss.getRange(row, column, infos.length, infos[0].length).setValues(infos);
 
+  if(fullSummary){
+
   /**
   Insert the events list into the spreadsheet
   **/
-
   var results = ss.getRange(row + infos.length + 1, column, allEventsForSheet.length, allEventsForSheet[0].length).setValues(allEventsForSheet)
 
+ }
 
+
+}
+
+function getOnlyTime(){
+  getAllEventsSummary(false)
 }
 
 function onOpen() {
   var ui = SpreadsheetApp.getUi();
   ui.createMenu('Meeting Time Calculator')
-    .addItem('Get Total Time', 'getAllEventsSummary')
+    .addItem('Get only Total Time', 'getOnlyTime')
+    .addItem('Get Total Time with Events Details', 'getAllEventsSummary')
     .addToUi()
 }
