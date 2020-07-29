@@ -30,9 +30,26 @@ function getAllEventsSummary(fullSummary=true) {
 
   /**
     Create array all events to insert into the sheet
+    Exclude the duplicated events, keep the first
     **/
+  var previousStart = new Date();
+  var previousEnd = new Date();
+  var currentStart;
+  var currentEnd;
+
   var allEventsForSheet = events.map(event => {
     excludeTime = false;
+
+    currentStart = event.getStartTime();
+    currentEnd = event.getEndTime();
+
+    similar = ( currentStart.getTime() == previousStart.getTime() ) &&  ( currentEnd.getTime() == previousEnd.getTime() )
+
+    previousStart =  currentStart;
+    previousEnd =  currentEnd ;
+
+    if (similar) return; // null if duplicate found
+
     duration = (event.getEndTime() - event.getStartTime()) / millisecToHours;
 
 
@@ -56,6 +73,10 @@ function getAllEventsSummary(fullSummary=true) {
 
   });
 
+  /**
+  Filter the null entries
+  **/
+  allEventsForSheetFiltered = allEventsForSheet.filter(el => el != null)
 
 
   var infos = [
@@ -75,7 +96,7 @@ function getAllEventsSummary(fullSummary=true) {
   /**
   Insert the events list into the spreadsheet
   **/
-  var results = ss.getRange(row + infos.length + 1, column, allEventsForSheet.length, allEventsForSheet[0].length).setValues(allEventsForSheet)
+  var results = ss.getRange(row + infos.length + 1, column, allEventsForSheetFiltered.length, allEventsForSheetFiltered[0].length).setValues(allEventsForSheetFiltered)
 
  }
 
